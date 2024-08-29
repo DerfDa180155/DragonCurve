@@ -52,7 +52,9 @@ class main:
         self.running = True
 
     def run(self):
-        scaler, self.pointsArray, vertices, middle = self.dragonCurve.generateNext(self.pointsArray)
+        scaler = 1.5
+        vertices = self.dragonCurve.generateVerticesArray(self.pointsArray)
+        middle = [0, 0.5]
         while self.running:
             generateNext = False
             for event in pygame.event.get():
@@ -76,8 +78,7 @@ class main:
             self.ctx.clear(bgColor[0], bgColor[1], bgColor[2])
             #print(self.pointsArray)
             if generateNext:
-                temp, self.pointsArray, vertices, middle = self.dragonCurve.generateNext(self.pointsArray)
-                generateNext = False
+                scaler, self.pointsArray, vertices, middle = self.dragonCurve.generateNext(self.pointsArray)
                 print("Generate")
 
 

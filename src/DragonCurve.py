@@ -25,16 +25,8 @@ class DragonCurve:
     def calculateMiddle(self, minX, maxX, minY, maxY):
         return [((maxX-minX)/2)+minX, ((maxY-minY)/2)+minY]
 
-    def generateScaler(self, pointsArray):
-        scaler = 1
-
-        # not working correctly
-        for i in range(len(pointsArray)):
-            pass
-            #scaler *= 0.99999
-            #print(scaler)
-
-        return 1
+    def generateScaler(self, length):
+        return 1.5 / length
 
     def generateVerticesArray(self, pointsArray):
         vertexArray = []
@@ -80,6 +72,11 @@ class DragonCurve:
                     minY = newPoint[1]
                 newPointArray.append(newPoint)
 
-        middle = self.calculateMiddle(minX, maxX, minY, maxY)
+        # scaler
+        lenX = maxX - minX
+        lenY = maxY - minY
+        length = lenY
+        if lenX > lenY:
+            length = lenX
 
-        return self.generateScaler(pointsArray), newPointArray, self.generateVerticesArray(newPointArray), middle
+        return self.generateScaler(length), newPointArray, self.generateVerticesArray(newPointArray), self.calculateMiddle(minX, maxX, minY, maxY)
