@@ -52,19 +52,33 @@ class main:
         self.running = True
 
     def run(self):
+        scaler, self.pointsArray, vertices, middle = self.dragonCurve.generateNext(self.pointsArray)
         while self.running:
+            generateNext = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
+                    elif event.key == pygame.K_SPACE:
+                        generateNext = True
+
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_UP]:
+                scaler += 0.005 * scaler
+            elif keys[pygame.K_DOWN]:
+                scaler -= 0.005 * scaler
+            #print(scaler)
 
             # clear Screen
             bgColor = (0.1, 0.1, 0.1)
             self.ctx.clear(bgColor[0], bgColor[1], bgColor[2])
             #print(self.pointsArray)
-            scaler, self.pointsArray, vertices, middle = self.dragonCurve.generateNext(self.pointsArray)
+            if generateNext:
+                temp, self.pointsArray, vertices, middle = self.dragonCurve.generateNext(self.pointsArray)
+                generateNext = False
+                print("Generate")
 
 
             vbo = self.ctx.buffer(vertices)

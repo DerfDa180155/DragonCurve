@@ -10,7 +10,7 @@ class DragonCurve:
         pass
 
     def generateStartArray(self):
-        return [[0, 0], [0, 1], [1, 1]]
+        return [[0, 0], [0, 1]]
 
     def rotate(self, point: array, rotationPoint: array):
         newPoint = []
@@ -22,12 +22,16 @@ class DragonCurve:
         newPoint.append(rotationPoint[1]-xdiff)
         return newPoint
 
+    def calculateMiddle(self, minX, maxX, minY, maxY):
+        return [((maxX-minX)/2)+minX, ((maxY-minY)/2)+minY]
+
     def generateScaler(self, pointsArray):
         scaler = 1
 
         # not working correctly
         for i in range(len(pointsArray)):
-            scaler *= 0.8
+            pass
+            #scaler *= 0.99999
             #print(scaler)
 
         return 1
@@ -51,10 +55,31 @@ class DragonCurve:
     def generateNext(self, pointsArray: array):
         newPointArray = pointsArray.copy()
         endpoint = pointsArray[len(pointsArray)-1]
+        minX = 0
+        maxX = 0
+        minY = 0
+        maxY = 0
         for point in reversed(pointsArray):
+            if point[0] > maxX:
+                maxX = point[0]
+            elif point[0] < minX:
+                minX = point[0]
+            if point[1] > maxY:
+                maxY = point[1]
+            elif point[1] < minY:
+                minY = point[1]
             if point != endpoint:
-                newPointArray.append(self.rotate(point, endpoint))
+                newPoint = self.rotate(point, endpoint)
+                if newPoint[0] > maxX:
+                    maxX = newPoint[0]
+                elif newPoint[0] < minX:
+                    minX = newPoint[0]
+                if newPoint[1] > maxY:
+                    maxY = newPoint[1]
+                elif newPoint[1] < minY:
+                    minY = newPoint[1]
+                newPointArray.append(newPoint)
 
-        middle = [0, 0]
+        middle = self.calculateMiddle(minX, maxX, minY, maxY)
 
         return self.generateScaler(pointsArray), newPointArray, self.generateVerticesArray(newPointArray), middle
