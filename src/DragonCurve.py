@@ -36,9 +36,9 @@ class DragonCurve:
             vertexArray.append(position[0])
             vertexArray.append(position[1])
             # color
-            vertexArray.append(1)
-            vertexArray.append(1)
-            vertexArray.append(1)
+            vertexArray.append(255)
+            vertexArray.append(255)
+            vertexArray.append(255)
 
         vertexArray = np.array(vertexArray, dtype='f4')
 

@@ -41,7 +41,7 @@ class main:
         out vec4 f_Color;
         
         void main() {
-            f_Color = vec4(v_Color, 1.0);
+            f_Color = vec4(v_Color/255, 1.0);
         }
         '''
 
