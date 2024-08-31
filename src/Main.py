@@ -2,6 +2,7 @@ import pygame
 import moderngl
 import numpy as np
 import DragonCurve
+from PIL import Image
 
 class main:
     def __init__(self):
@@ -55,6 +56,7 @@ class main:
         scaler = 1.5
         vertices = self.dragonCurve.generateVerticesArray(self.pointsArray)
         middle = [0, 0.5]
+
         while self.running:
             generateNext = False
             for event in pygame.event.get():
@@ -65,22 +67,24 @@ class main:
                         self.running = False
                     elif event.key == pygame.K_SPACE:
                         generateNext = True
+                    elif event.key == pygame.K_s: # save rendert image
+                        print("Save")
+                        Image.frombytes('RGB', self.screen.get_size(), self.ctx.screen.read(), 'raw', 'RGB', 0, -1).save("DragonCurve.png")
 
+            # hotkeys for zooming in and out
             keys = pygame.key.get_pressed()
             if keys[pygame.K_UP]:
                 scaler += 0.005 * scaler
             elif keys[pygame.K_DOWN]:
                 scaler -= 0.005 * scaler
-            #print(scaler)
 
             # clear Screen
             bgColor = (0.1, 0.1, 0.1)
             self.ctx.clear(bgColor[0], bgColor[1], bgColor[2])
-            #print(self.pointsArray)
+
             if generateNext:
                 scaler, self.pointsArray, vertices, middle = self.dragonCurve.generateNext(self.pointsArray)
                 print("Generate")
-
 
             vbo = self.ctx.buffer(vertices)
             vao = self.ctx.vertex_array(self.prog, vbo, 'in_Position', 'in_Color')
