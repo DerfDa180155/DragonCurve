@@ -31,14 +31,18 @@ class DragonCurve:
     def generateVerticesArray(self, pointsArray):
         vertexArray = []
 
+        count = 0
         for position in pointsArray:
             # position
             vertexArray.append(position[0])
             vertexArray.append(position[1])
             # color
-            vertexArray.append(255)
-            vertexArray.append(255)
-            vertexArray.append(255)
+            #vertexArray.append(255)
+            #vertexArray.append(255)
+            #vertexArray.append(255)
+            # number
+            vertexArray.append(count)
+            count += 1
 
         vertexArray = np.array(vertexArray, dtype='f4')
 

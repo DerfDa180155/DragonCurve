@@ -21,15 +21,19 @@ class main:
         #version 330 core
         
         in vec2 in_Position;
-        in vec3 in_Color;
+        //in vec3 in_Color;
+        in float in_vNumber;
+        
         uniform float scaler;
         uniform vec2 middle;
         
-        out vec3 v_Color;
+        //out vec3 v_Color;
+        out float v_Number;
         
         void main() {
             gl_Position = vec4((in_Position-middle)*scaler, 0.0, 1.0);
-            v_Color = in_Color;
+            //v_Color = in_Color;
+            v_Number = in_vNumber;
         }
         '''
 
@@ -37,11 +41,24 @@ class main:
         #version 330 core
         
         in vec3 v_Color;
+        in float v_Number;
+        
+        uniform vec3 startColor;
+        uniform vec3 endColor;
+        uniform int amount;
         
         out vec4 f_Color;
         
+        vec3 tempColor;
+        vec3 tempColor2;
+        vec3 finalColor;
+        
         void main() {
-            f_Color = vec4(v_Color/255, 1.0);
+            //f_Color = vec4(v_Color*v_Number/255, 1.0);
+            tempColor = (endColor-startColor)/amount;
+            tempColor2 = tempColor*v_Number;
+            finalColor = startColor + tempColor2;
+            f_Color = vec4(finalColor/255, 1.0);
         }
         '''
 
@@ -87,11 +104,23 @@ class main:
                 print("Generate")
 
             vbo = self.ctx.buffer(vertices)
-            vao = self.ctx.vertex_array(self.prog, vbo, 'in_Position', 'in_Color')
+            vao = self.ctx.vertex_array(self.prog, vbo, 'in_Position', 'in_vNumber')
 
+            # vertex shader variables
             self.prog['scaler'] = scaler
             self.prog['middle'] = middle
+
+            # fragment shader variables
+            self.prog['startColor'] = [255,0,0]
+            self.prog['endColor'] = [0,255,0]
+            self.prog['amount'] = len(self.pointsArray)-1
+
+            # render the image
             vao.render(moderngl.LINE_STRIP)
+
+            # releasing
+            vbo.release()
+            vao.release()
 
             pygame.display.flip()
             self.clock.tick(60)
