@@ -18,8 +18,9 @@ class DragonCurve:
         xdiff = rotationPoint[0] - point[0]
         ydiff = rotationPoint[1] - point[1]
 
-        newPoint.append(rotationPoint[0]+ydiff)
-        newPoint.append(rotationPoint[1]-xdiff)
+        newPoint.append(rotationPoint[0] + ydiff)
+        newPoint.append(rotationPoint[1] - xdiff)
+
         return newPoint
 
     def calculateMiddle(self, minX, maxX, minY, maxY):
@@ -30,17 +31,14 @@ class DragonCurve:
 
     def generateVerticesArray(self, pointsArray):
         vertexArray = []
-
         count = 0
+
         for position in pointsArray:
             # position
             vertexArray.append(position[0])
             vertexArray.append(position[1])
-            # color
-            #vertexArray.append(255)
-            #vertexArray.append(255)
-            #vertexArray.append(255)
-            # number
+
+            # vertex number
             vertexArray.append(count)
             count += 1
 
@@ -51,11 +49,13 @@ class DragonCurve:
     def generateNext(self, pointsArray: array):
         newPointArray = pointsArray.copy()
         endpoint = pointsArray[len(pointsArray)-1]
+
         minX = 0
         maxX = 0
         minY = 0
         maxY = 0
-        for point in reversed(pointsArray):
+
+        for point in reversed(newPointArray):
             if point[0] > maxX:
                 maxX = point[0]
             elif point[0] < minX:
@@ -64,6 +64,7 @@ class DragonCurve:
                 maxY = point[1]
             elif point[1] < minY:
                 minY = point[1]
+
             if point != endpoint:
                 newPoint = self.rotate(point, endpoint)
                 if newPoint[0] > maxX:
